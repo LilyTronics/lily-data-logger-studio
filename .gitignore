@@ -1,0 +1,5 @@
+# PyCharm settings
+.idea/*
+
+# Python byte code
+*.pyc
