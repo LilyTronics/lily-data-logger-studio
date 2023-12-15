@@ -31,14 +31,15 @@ class Logger(object):
         def flush(self):
             pass
 
-    def __init__(self):
+    def __init__(self, redirect_std=True):
         self._log_messages = []
         self._output = ''
 
         self._orgStdout = sys.stdout
         self._orgStderr = sys.stderr
-        sys.stdout = self._StdLogger(self, self.TYPE_STDOUT)
-        sys.stderr = self._StdLogger(self, self.TYPE_STDERR)
+        if redirect_std:
+            sys.stdout = self._StdLogger(self, self.TYPE_STDOUT)
+            sys.stderr = self._StdLogger(self, self.TYPE_STDERR)
 
     def get_log_messages(self):
         return self._log_messages
