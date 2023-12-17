@@ -5,15 +5,23 @@ Runs all test suites from a specific package (recursive)
 
 import inspect
 import os
+import shutil
 
 from unit_test.models.logger import Logger
+from unit_test.test_suite import TestSuite
 
 
 class TestRunner(object):
 
+    project_path = os.path.dirname(os.path.dirname(__file__))
+    output_folder = os.path.join(project_path, 'test_reports')
+
+    ###########
+    # Private #
+    ###########
+
     @classmethod
     def _populate_test_suites(cls, root_path):
-        project_path = os.path.dirname(os.path.dirname(__file__))
         test_suites = []
         for current_folder, sub_folders, filenames in os.walk(root_path):
             sub_folders.sort()
@@ -30,15 +38,42 @@ class TestRunner(object):
 
         return test_suites
 
+    ##########
+    # Public #
+    ##########
+
     @classmethod
     def run(cls, package):
-        log = Logger()
+        if os.path.isdir(cls.output_folder):
+            shutil.rmtree(cls.output_folder)
+        os.makedirs(cls.output_folder)
+
+        test_runner_log = Logger(False)
+
         package_folder = os.path.dirname(package.__file__)
         test_suites = cls._populate_test_suites(package_folder)
+        if len(test_suites) > 0:
+            test_runner_log.info('Run all test suites from folder: {}'.format(package_folder))
 
-        #log.info('Run all test suites from folder: {}'.format(package_folder))
+            for i, test_suite in enumerate(test_suites):
+                test_suite_name = test_suite.__name__
+                test_runner_log.info('Run test suite: {}'.format(test_suite_name))
+                ts = test_suite()
+                result = ts.run()
+                if result is None or result:
+                    test_runner_log.info('Test suite {}: PASSED'.format(test_suite_name))
+                else:
+                    test_runner_log.info('Test suite {}: FAILED'.format(test_suite_name))
 
-        log.shutdown()
+                with open(os.path.join(cls.output_folder, '{:02d}_{}.txt'.format(i + 2, test_suite_name)), 'w') as fp:
+                    fp.writelines(map(lambda x: '{}\n'.format(x), ts.log.get_log_messages()))
+
+        else:
+            test_runner_log.info('No test suites found in folder: {}'.format(package_folder))
+
+        test_runner_log.shutdown()
+        with open(os.path.join(cls.output_folder, '01_TestRunner.txt'), 'w') as fp:
+            fp.writelines(map(lambda x: '{}\n'.format(x), test_runner_log.get_log_messages()))
 
 
 if __name__ == '__main__':
