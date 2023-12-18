@@ -43,7 +43,9 @@ class TestRunner(object):
     ##########
 
     @classmethod
-    def run(cls, package):
+    def run(cls, package, tests_to_run=None):
+        if tests_to_run is None:
+            tests_to_run = []
         if os.path.isdir(cls.output_folder):
             shutil.rmtree(cls.output_folder)
         os.makedirs(cls.output_folder)
@@ -52,6 +54,9 @@ class TestRunner(object):
 
         package_folder = os.path.dirname(package.__file__)
         test_suites = cls._populate_test_suites(package_folder)
+        print(test_suites[0].__name__)
+        if len(tests_to_run) > 0:
+            test_suites = list(filter(lambda x: x.__name__ in tests_to_run, test_suites))
         n_test_suites = len(test_suites)
         n_digits = len(str(n_test_suites))
         report_name_format = '{{:0{}d}}_{{}}.txt'.format(n_digits)
