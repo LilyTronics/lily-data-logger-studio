@@ -3,10 +3,13 @@ Test runner class.
 Runs all test suites from a specific package (recursive)
 """
 
+import glob
 import inspect
 import os
 import shutil
+import webbrowser
 
+from string import Template
 from unit_test.models.logger import Logger
 from unit_test.test_suite import TestSuite
 
@@ -81,7 +84,7 @@ class TestRunner(object):
 
             test_runner_log.empty_line()
             ratio = 100 * n_test_suites_passed / n_test_suites
-            test_runner_log.info('{} of {} tests passed ({:.1f}%)'.format(n_test_suites_passed, n_test_suites, ratio))
+            test_runner_log.info('{} of {} test suites passed ({:.1f}%)'.format(n_test_suites_passed, n_test_suites, ratio))
             if n_test_suites == n_test_suites_passed:
                 test_runner_log.info('Test runner result: PASSED')
             else:
