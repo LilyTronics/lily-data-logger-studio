@@ -61,6 +61,7 @@ class TestRunner(object):
         n_digits = len(str(n_test_suites))
         report_name_format = '{{:0{}d}}_{{}}.txt'.format(n_digits)
         if n_test_suites > 0:
+            n_test_suites_passed = 0
             test_runner_log.info('Run {} test suites from folder: {}'.format(n_test_suites, package_folder))
 
             for i, test_suite in enumerate(test_suites):
@@ -70,12 +71,21 @@ class TestRunner(object):
                 ts = test_suite()
                 result = ts.run()
                 if result is None or result:
+                    n_test_suites_passed += 1
                     test_runner_log.info('Test suite {}: PASSED'.format(test_suite_name))
                 else:
                     test_runner_log.info('Test suite {}: FAILED'.format(test_suite_name))
 
                 with open(os.path.join(cls.output_folder, report_name_format.format(i + 2, test_suite_name)), 'w') as fp:
                     fp.writelines(map(lambda x: '{}\n'.format(x), ts.log.get_log_messages()))
+
+            test_runner_log.empty_line()
+            ratio = 100 * n_test_suites_passed / n_test_suites
+            test_runner_log.info('{} of {} tests passed ({:.1f}%)'.format(n_test_suites_passed, n_test_suites, ratio))
+            if n_test_suites == n_test_suites_passed:
+                test_runner_log.info('Test runner result: PASSED')
+            else:
+                test_runner_log.error('Test runner result: FAILED')
 
         else:
             test_runner_log.info('No test suites found in folder: {}'.format(package_folder))
