@@ -52,11 +52,15 @@ class TestRunner(object):
 
         package_folder = os.path.dirname(package.__file__)
         test_suites = cls._populate_test_suites(package_folder)
-        if len(test_suites) > 0:
-            test_runner_log.info('Run all test suites from folder: {}'.format(package_folder))
+        n_test_suites = len(test_suites)
+        n_digits = len(str(n_test_suites))
+        report_name_format = '{{:0{}d}}_{{}}.txt'.format(n_digits)
+        if n_test_suites > 0:
+            test_runner_log.info('Run {} test suites from folder: {}'.format(n_test_suites, package_folder))
 
             for i, test_suite in enumerate(test_suites):
                 test_suite_name = test_suite.__name__
+                test_runner_log.empty_line()
                 test_runner_log.info('Run test suite: {}'.format(test_suite_name))
                 ts = test_suite()
                 result = ts.run()
@@ -65,14 +69,14 @@ class TestRunner(object):
                 else:
                     test_runner_log.info('Test suite {}: FAILED'.format(test_suite_name))
 
-                with open(os.path.join(cls.output_folder, '{:02d}_{}.txt'.format(i + 2, test_suite_name)), 'w') as fp:
+                with open(os.path.join(cls.output_folder, report_name_format.format(i + 2, test_suite_name)), 'w') as fp:
                     fp.writelines(map(lambda x: '{}\n'.format(x), ts.log.get_log_messages()))
 
         else:
             test_runner_log.info('No test suites found in folder: {}'.format(package_folder))
 
         test_runner_log.shutdown()
-        with open(os.path.join(cls.output_folder, '01_TestRunner.txt'), 'w') as fp:
+        with open(os.path.join(cls.output_folder, report_name_format.format(1, 'test_runner')), 'w') as fp:
             fp.writelines(map(lambda x: '{}\n'.format(x), test_runner_log.get_log_messages()))
 
 

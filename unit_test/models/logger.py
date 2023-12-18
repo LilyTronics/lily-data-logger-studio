@@ -15,6 +15,7 @@ class Logger(object):
     TYPE_ERROR = 'ERROR'
     TYPE_STDOUT = 'STDOUT'
     TYPE_STDERR = 'STDERR'
+    TYPE_EMPTY_LINE = 'EMPTY_LINE'
 
     _TIME_STAMP_FORMAT = "%Y%m%d %H:%M:%S.%f"
     _LOG_FORMAT = '{} - {:6} - {}'
@@ -57,16 +58,24 @@ class Logger(object):
     def error(self, message):
         self.handle_message(self.TYPE_ERROR, '{}\n'.format(message))
 
-    def handle_message(self, message_type, message_text):
-        timestamp = datetime.now().strftime(self._TIME_STAMP_FORMAT)[:-3]
+    def empty_line(self):
+        self.handle_message(self.TYPE_EMPTY_LINE, '')
 
-        self._output += message_text
-        while '\n' in self._output:
-            index = self._output.find('\n')
-            line = self._LOG_FORMAT.format(timestamp, message_type, self._output[:index])
-            self._output = self._output[index + 1:]
-            self._log_messages.append(line)
-            self._orgStdout.write('{}\n'.format(line))
+    def handle_message(self, message_type, message_text):
+        if message_type == self.TYPE_EMPTY_LINE:
+            self._log_messages.append('')
+            self._orgStdout.write('\n')
+
+        else:
+            timestamp = datetime.now().strftime(self._TIME_STAMP_FORMAT)[:-3]
+
+            self._output += message_text
+            while '\n' in self._output:
+                index = self._output.find('\n')
+                line = self._LOG_FORMAT.format(timestamp, message_type, self._output[:index])
+                self._output = self._output[index + 1:]
+                self._log_messages.append(line)
+                self._orgStdout.write('{}\n'.format(line))
 
 
 if __name__ == "__main__":
