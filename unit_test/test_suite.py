@@ -14,13 +14,11 @@ class TestSuite(object):
         test_suite_name = self.__class__.__name__
         self.log.info('Run test suite: {}'.format(test_suite_name))
 
-        n_tests = 0
-        n_tests_run = 0
-        n_passed = 0
+        test_suite_result = False
         try:
             test_methods = sorted(list(filter(lambda x: x.startswith('test_'), dir(self))))
             n_tests = len(test_methods)
-            assert n_tests > 0, 'No methods starting with test_ found'
+            assert n_tests > 0, 'No tests defined'
 
             # Run the setup
             try:
@@ -33,9 +31,9 @@ class TestSuite(object):
                 setup_result = False
 
             if setup_result:
+                n_passed = 0
                 # Run the test methods
                 for test_method in test_methods:
-                    n_tests_run += 1
                     test_case_name = '{}.{}'.format(test_suite_name, test_method)
                     self.log.info('Run test case: {}'.format(test_case_name))
                     try:
@@ -49,21 +47,31 @@ class TestSuite(object):
                     except Exception as e:
                         self.log.error('Test case {}: FAILED by exception: {}'.format(test_case_name, e))
 
+                ratio = 100 * n_passed / n_tests
+                self.log.info('Test suite {}: {} of {} tests passed ({:.1f}%)'.format(
+                              test_suite_name, n_passed, n_tests, ratio))
+
+                test_suite_result = n_passed == n_tests
+
             # Run the teardown
-            self.teardown()
+            try:
+                self.teardown()
+            except Exception as e:
+                self.log.error('Test suite {}: FAILED by exception in teardown: {}'.format(test_suite_name, e))
+                test_suite_result = False
 
         except Exception as e:
             self.log.error('Test suite {}: FAILED by exception: {}'.format(test_suite_name, e))
+            test_suite_result = False
 
-        if n_tests > 0 and n_tests_run > 0:
-            ratio = 100 * n_passed / n_tests
-            result = '{} of {} tests passed ({:.1f}%)'.format(n_passed, n_tests, ratio)
-            if n_tests == n_passed:
-                self.log.info('Test suite {}: PASSED, {}'.format(test_suite_name, result))
-            else:
-                self.log.error('Test suite {}: FAILED, {}'.format(test_suite_name, result))
+        if test_suite_result:
+            self.log.info('Test suite {}: PASSED'.format(test_suite_name))
+        else:
+            self.log.error('Test suite {}: FAILED'.format(test_suite_name))
 
         self.log.shutdown()
+
+        return test_suite_result
 
     ##############################
     # Override these when needed #
@@ -75,18 +83,7 @@ class TestSuite(object):
 
 if __name__ == '__main__':
 
-    from unit_test.test_classes.test_class_empty import TestClassEmpty
-    from unit_test.test_classes.test_class_pass import TestClassPass
-    from unit_test.test_classes.test_class_fail import TestClassFail
-    from unit_test.test_classes.test_class_setup_fail_return_false import TestClassSetupFailReturnFalse
+    from unit_test import test_classes
+    from unit_test.test_runner import TestRunner
 
-    test_suite_classes = [
-        TestClassEmpty,
-        TestClassPass,
-        TestClassFail,
-        TestClassSetupFailReturnFalse
-    ]
-
-    for test_suite_class in test_suite_classes:
-        test_suite_class().run()
-        print()
+    TestRunner.run(test_classes)
