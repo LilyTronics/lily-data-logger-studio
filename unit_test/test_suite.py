@@ -48,7 +48,7 @@ class TestSuite(object):
                         self.log.error('Test case {}: FAILED by exception\nException: {}'.format(test_case_name, e))
 
                 ratio = 100 * n_passed / n_tests
-                self.log.info('Test suite {}: {} of {} tests passed ({:.1f}%)'.format(
+                self.log.info('Test suite {}: {} of {} test cases passed ({:.1f}%)'.format(
                               test_suite_name, n_passed, n_tests, ratio))
 
                 test_suite_result = n_passed == n_tests
