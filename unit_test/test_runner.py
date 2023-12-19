@@ -54,7 +54,6 @@ class TestRunner(object):
 
         package_folder = os.path.dirname(package.__file__)
         test_suites = cls._populate_test_suites(package_folder)
-        print(test_suites[0].__name__)
         if len(tests_to_run) > 0:
             test_suites = list(filter(lambda x: x.__name__ in tests_to_run, test_suites))
         n_test_suites = len(test_suites)
