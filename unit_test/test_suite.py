@@ -27,7 +27,7 @@ class TestSuite(object):
                     self.log.error('Test suite {}: FAILED: setup failed'.format(test_suite_name))
                 setup_result = True
             except Exception as e:
-                self.log.error('Test suite {}: FAILED by exception in setup: {}'.format(test_suite_name, e))
+                self.log.error('Test suite {}: FAILED by exception in setup\nException: {}'.format(test_suite_name, e))
                 setup_result = False
 
             if setup_result:
@@ -45,7 +45,7 @@ class TestSuite(object):
                             self.log.error('Test case {}: FAILED'.format(test_case_name))
 
                     except Exception as e:
-                        self.log.error('Test case {}: FAILED by exception: {}'.format(test_case_name, e))
+                        self.log.error('Test case {}: FAILED by exception\nException: {}'.format(test_case_name, e))
 
                 ratio = 100 * n_passed / n_tests
                 self.log.info('Test suite {}: {} of {} tests passed ({:.1f}%)'.format(
@@ -57,11 +57,11 @@ class TestSuite(object):
             try:
                 self.teardown()
             except Exception as e:
-                self.log.error('Test suite {}: FAILED by exception in teardown: {}'.format(test_suite_name, e))
+                self.log.error('Test suite {}: FAILED by exception in teardown\nException: {}'.format(test_suite_name, e))
                 test_suite_result = False
 
         except Exception as e:
-            self.log.error('Test suite {}: FAILED by exception: {}'.format(test_suite_name, e))
+            self.log.error('Test suite {}: FAILED by exception\nException: {}'.format(test_suite_name, e))
             test_suite_result = False
 
         if test_suite_result:
