@@ -90,7 +90,7 @@ class TestRunner(object):
             test_runner_log.info('No test suites found in folder: {}'.format(package_folder))
 
         test_runner_log.shutdown()
-        with open(os.path.join(cls.output_folder, report_name_format.format(1, 'test_runner')), 'w') as fp:
+        with open(os.path.join(cls.output_folder, report_name_format.format(1, 'TestRunner')), 'w') as fp:
             fp.writelines(map(lambda x: '{}\n'.format(x), test_runner_log.get_log_messages()))
 
 
