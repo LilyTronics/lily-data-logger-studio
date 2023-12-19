@@ -73,7 +73,7 @@ class TestRunner(object):
                     n_test_suites_passed += 1
                     test_runner_log.info('Test suite {}: PASSED'.format(test_suite_name))
                 else:
-                    test_runner_log.info('Test suite {}: FAILED'.format(test_suite_name))
+                    test_runner_log.error('Test suite {}: FAILED'.format(test_suite_name))
 
                 with open(os.path.join(cls.output_folder, report_name_format.format(i + 2, test_suite_name)), 'w') as fp:
                     fp.writelines(map(lambda x: '{}\n'.format(x), ts.log.get_log_messages()))
