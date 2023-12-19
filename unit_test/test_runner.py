@@ -3,13 +3,10 @@ Test runner class.
 Runs all test suites from a specific package (recursive)
 """
 
-import glob
 import inspect
 import os
 import shutil
-import webbrowser
 
-from string import Template
 from unit_test.models.logger import Logger
 from unit_test.test_suite import TestSuite
 
