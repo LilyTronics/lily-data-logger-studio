@@ -17,8 +17,8 @@ class Logger(object):
     TYPE_STDERR = 'STDERR'
     TYPE_EMPTY_LINE = 'EMPTY_LINE'
 
-    _TIME_STAMP_FORMAT = "%Y%m%d %H:%M:%S.%f"
-    _LOG_FORMAT = '{} - {:6} - {}'
+    TIME_STAMP_FORMAT = "%Y-%m-%d %H:%M:%S.%f"
+    _LOG_FORMAT = '{} | {:6} | {}'
 
     class _StdLogger(object):
 
@@ -69,8 +69,7 @@ class Logger(object):
                 self._orgStdout.write('\n')
 
         else:
-            timestamp = datetime.now().strftime(self._TIME_STAMP_FORMAT)[:-3]
-
+            timestamp = datetime.now().strftime(self.TIME_STAMP_FORMAT)[:-3]
             self._output += message_text
             while '\n' in self._output:
                 index = self._output.find('\n')
