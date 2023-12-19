@@ -32,7 +32,8 @@ class Logger(object):
         def flush(self):
             pass
 
-    def __init__(self, redirect_std=True):
+    def __init__(self, redirect_std=True, log_to_stdout=True):
+        self._log_to_stdout = log_to_stdout
         self._log_messages = []
         self._output = ''
 
@@ -64,7 +65,8 @@ class Logger(object):
     def handle_message(self, message_type, message_text):
         if message_type == self.TYPE_EMPTY_LINE:
             self._log_messages.append('')
-            self._orgStdout.write('\n')
+            if self._log_to_stdout:
+                self._orgStdout.write('\n')
 
         else:
             timestamp = datetime.now().strftime(self._TIME_STAMP_FORMAT)[:-3]
@@ -75,7 +77,8 @@ class Logger(object):
                 line = self._LOG_FORMAT.format(timestamp, message_type, self._output[:index])
                 self._output = self._output[index + 1:]
                 self._log_messages.append(line)
-                self._orgStdout.write('{}\n'.format(line))
+                if self._log_to_stdout:
+                    self._orgStdout.write('{}\n'.format(line))
 
 
 if __name__ == "__main__":
