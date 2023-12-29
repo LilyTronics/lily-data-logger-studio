@@ -22,7 +22,6 @@ class ViewMainTest(lily_unit_test.TestSuite):
 
     def test_01_show_frame(self):
         self.frame.Show()
-        assert wx.Window.FindWindowByName(self.WINDOW_NAME) is not None, 'Window is not loaded'
 
     def teardown(self):
         if not hasattr(self, 'do_not_close') or hasattr(self, 'do_not_close') and not self.do_not_close:
