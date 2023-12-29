@@ -5,4 +5,4 @@
 *.pyc
 
 # test reports
-/test_reports/*
+**/lily_unit_test_reports/*
