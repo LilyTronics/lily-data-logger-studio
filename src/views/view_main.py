@@ -17,6 +17,9 @@ class ViewMain(wx.Frame):
     _LIST_COL_DATA_SIZE = 120
     _TABLE_MIN_COL_WIDTH = 100
 
+    _LED_SIZE = (16, 16)
+    _COLOR_LED_OFF = '#060'
+
     _MINIMUM_WINDOW_SIZE = (1100, 700)
 
     def __init__(self, title):
@@ -28,13 +31,43 @@ class ViewMain(wx.Frame):
         lab_box.Add(self._create_process_box(panel), 30, wx.EXPAND | wx.ALL, self._GAP)
         lab_box.Add(self._create_measurement_box(panel), 50, wx.EXPAND | wx.TOP | wx.RIGHT | wx.BOTTOM, self._GAP)
 
-        panel.SetSizer(lab_box)
+        main_box = wx.BoxSizer(wx.VERTICAL)
+        main_box.Add(self._create_config_info(panel), 0, wx.EXPAND | wx.ALL, self._GAP)
+        main_box.Add(lab_box, 1, wx.EXPAND)
+
+        panel.SetSizer(main_box)
 
         self.SetInitialSize(self._MINIMUM_WINDOW_SIZE)
 
     ###########
     # Private #
     ###########
+
+    def _create_config_info(self, parent):
+        box = wx.StaticBoxSizer(wx.StaticBox(parent, wx.ID_ANY, ' Configuration: '), wx.HORIZONTAL)
+
+        lbl_sample_time = wx.StaticText(parent, wx.ID_ANY, 'Sample time:')
+        self._lbl_sample_time = wx.StaticText(parent, wx.ID_ANY, '-')
+        self._lbl_end_time = wx.StaticText(parent, wx.ID_ANY, 'End time:')
+        self._value_end_time = wx.StaticText(parent, wx.ID_ANY, '-')
+        self._lbl_total_samples = wx.StaticText(parent, wx.ID_ANY, 'Total samples:')
+        self._value_total_samples = wx.StaticText(parent, wx.ID_ANY, '-')
+        lbl_elapsed_time = wx.StaticText(parent, wx.ID_ANY, 'Elapsed time:')
+        self._lbl_elapsed_time = wx.StaticText(parent, wx.ID_ANY, '-')
+        self._activity_led = wx.Panel(parent, wx.ID_ANY, size=self._LED_SIZE, style=wx.BORDER_SIMPLE)
+        self._activity_led.SetBackgroundColour(self._COLOR_LED_OFF)
+
+        box.Add(lbl_sample_time, 0, wx.ALL, self._GAP)
+        box.Add(self._lbl_sample_time, 0, wx.ALL, self._GAP)
+        box.Add(self._lbl_end_time, 0, wx.ALL, self._GAP)
+        box.Add(self._value_end_time, 0, wx.ALL, self._GAP)
+        box.Add(self._lbl_total_samples, 0, wx.ALL, self._GAP)
+        box.Add(self._value_total_samples, 0, wx.ALL, self._GAP)
+        box.Add(lbl_elapsed_time, 0, wx.ALL, self._GAP)
+        box.Add(self._lbl_elapsed_time, 0, wx.ALL, self._GAP)
+        box.Add(self._activity_led, 0, wx.ALL, self._GAP)
+
+        return box
 
     def _create_instruments_controls(self, parent):
         box = wx.StaticBoxSizer(wx.StaticBox(parent, wx.ID_ANY, ' Instruments: '), wx.VERTICAL)
