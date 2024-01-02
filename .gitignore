@@ -2,7 +2,7 @@
 /.idea/*
 
 # Python vitual environment
-/venv/*
+/.venv/*
 
 # Python byte code
 *.pyc
