@@ -11,17 +11,23 @@ from wx.dataview import DataViewTreeCtrl
 
 class ViewMain(wx.Frame):
 
-    _GAP = 10
-    _MINIMUM_WINDOW_SIZE = (400, 700)
+    _GAP = 5
+
+    _LIST_COL_INDEX_SIZE = 30
+    _LIST_COL_STEP_SIZE = 120
+    _LIST_COL_DATA_SIZE = 120
+
+    _MINIMUM_WINDOW_SIZE = (1100, 700)
 
     def __init__(self, title):
         super().__init__(None, wx.ID_ANY, title)
         panel = wx.Panel(self)
 
-        main_box = wx.BoxSizer(wx.HORIZONTAL)
-        main_box.Add(self._create_instruments_controls(panel), 1, wx.EXPAND | wx.ALL, self._GAP)
+        lab_box = wx.BoxSizer(wx.HORIZONTAL)
+        lab_box.Add(self._create_instruments_controls(panel), 20, wx.EXPAND | wx.TOP | wx.LEFT | wx.BOTTOM, self._GAP)
+        lab_box.Add(self._create_process_box(panel), 30, wx.EXPAND | wx.ALL, self._GAP)
 
-        panel.SetSizer(main_box)
+        panel.SetSizer(lab_box)
 
         self.SetInitialSize(self._MINIMUM_WINDOW_SIZE)
 
@@ -31,6 +37,8 @@ class ViewMain(wx.Frame):
 
     def _create_instruments_controls(self, parent):
         box = wx.StaticBoxSizer(wx.StaticBox(parent, wx.ID_ANY, ' Instruments: '), wx.VERTICAL)
+
+        self.instruments = DataViewTreeCtrl(parent)
 
         btn_add_instrument = wx.Button(parent, size=(36, 36))
         btn_add_instrument.SetBitmap(ImageData.add_instrument_24.Bitmap)
@@ -52,13 +60,34 @@ class ViewMain(wx.Frame):
         buttons.Add(btn_add_io, 0)
         buttons.Add(btn_delete_io, 0)
 
-        self.instruments = DataViewTreeCtrl(parent)
-
-        box.Add(buttons, 0, wx.ALL, self._GAP)
-        box.Add(self.instruments, 1, wx.EXPAND | wx.RIGHT | wx.BOTTOM | wx.LEFT, self._GAP)
+        box.Add(self.instruments, 1, wx.EXPAND | wx.ALL, self._GAP)
+        box.Add(buttons, 0, wx.RIGHT | wx.BOTTOM | wx.LEFT, self._GAP)
 
         return box
 
+    def _create_process_box(self, parent):
+        box = wx.StaticBoxSizer(wx.StaticBox(parent, wx.ID_ANY, " Process: "), wx.VERTICAL)
+
+        self._lst_process = wx.ListCtrl(parent, wx.ID_ANY, style=wx.LC_REPORT | wx.LC_SINGLE_SEL | wx.LC_HRULES |
+                                                                 wx.LC_VRULES)
+        self._lst_process.SetInitialSize((-1, 100))
+        self._lst_process.InsertColumn(0, '#', width=self._LIST_COL_INDEX_SIZE)
+        self._lst_process.InsertColumn(1, 'Step', width=self._LIST_COL_STEP_SIZE)
+        self._lst_process.InsertColumn(2, 'Data', width=self._LIST_COL_DATA_SIZE)
+
+        btn_add_step = wx.Button(parent, wx.ID_ANY, 'Add')
+        btn_insert_step = wx.Button(parent, wx.ID_ANY, 'Insert')
+        btn_delete_step = wx.Button(parent, wx.ID_ANY, 'Delete')
+
+        grid = wx.GridBagSizer(self._GAP, self._GAP)
+        grid.Add(btn_add_step, (0, 0), wx.DefaultSpan)
+        grid.Add(btn_insert_step, (0, 1), wx.DefaultSpan)
+        grid.Add(btn_delete_step, (0, 2), wx.DefaultSpan)
+
+        box.Add(self._lst_process, 1, wx.EXPAND | wx.ALL, self._GAP)
+        box.Add(grid, 0, wx.ALL, self._GAP)
+
+        return box
 
 class ViewMainTest(lily_unit_test.TestSuite):
 
