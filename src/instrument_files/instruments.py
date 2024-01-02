@@ -30,9 +30,9 @@ def get_instrument_data_by_name(name):
 
 
 def parse_json_file(filename):
-    data = {}
     try:
         data = json.load(open(filename, 'r'))
+        assert 'name' in data.keys(), 'The instrument does not have a name field'
     except Exception as e:
         raise Exception('Error loading JSON file {}:\n{}'.format(filename, e))
 
@@ -42,6 +42,11 @@ def parse_json_file(filename):
 class TestInstrumentNames(lily_unit_test.TestSuite):
 
     EXPECTED_NAMES = ['Multimeter UDP', 'Temperature chamber UDP']
+    # Invalid files and the expected error message
+    INVALID_FILES = {
+        'empty_file': 'Expecting value: line 1 column 1 (char 0)',
+        'missing_name': 'The instrument does not have a name field'
+    }
 
     def test_01_list_names(self):
         result = True
@@ -76,17 +81,22 @@ class TestInstrumentNames(lily_unit_test.TestSuite):
 
     def test_03_invalid_files(self):
         n_failed = 0
-        for filename in ['empty.json']:
-            file_path = os.path.join(os.path.dirname(__file__), 'invalid_files', filename)
+        for filename in self.INVALID_FILES.keys():
+            file_path = os.path.join(os.path.dirname(__file__), 'invalid_files', '{}.json'.format(filename))
+            self.log.debug('Validating: {}'.format('{}.json'.format(filename)))
             try:
                 parse_json_file(file_path)
                 self.log.error('Loading file {} passed, but expected to fail'.format(filename))
                 n_failed += 1
             except Exception as e:
+                error_message = str(e).split('\n')[-1]
+                self.log.debug('Error message: {}'.format(error_message))
                 if file_path not in str(e):
                     self.log.error('The error message did not contain the filename {}'.format(filename))
                     self.log.debug(e)
                     n_failed += 1
+                elif self.INVALID_FILES[filename] != error_message:
+                    self.log.error('Incorrect error message, expected: {}'.format(self.INVALID_FILES[filename]))
 
         return n_failed == 0
 
