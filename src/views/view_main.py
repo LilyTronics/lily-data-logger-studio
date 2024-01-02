@@ -42,28 +42,15 @@ class ViewMain(wx.Frame):
 
         self.instruments = DataViewTreeCtrl(parent)
 
-        btn_add_instrument = wx.Button(parent, size=(36, 36))
-        btn_add_instrument.SetBitmap(ImageData.add_instrument_24.Bitmap)
-        btn_add_instrument.SetToolTip('Add instrument')
-        btn_delete_instrument = wx.Button(parent, size=(36, 36))
-        btn_delete_instrument.SetBitmap(ImageData.delete_instrument_24.Bitmap)
-        btn_delete_instrument.SetToolTip('Delete instrument')
-
-        btn_add_io = wx.Button(parent, size=(36, 36))
-        btn_add_io.SetBitmap(ImageData.add_io_24.Bitmap)
-        btn_add_io.SetToolTip('Add input or output')
-        btn_delete_io = wx.Button(parent, size=(36, 36))
-        btn_delete_io.SetBitmap(ImageData.delete_io_24.Bitmap)
-        btn_delete_io.SetToolTip('Delete input or output')
+        btn_add_instrument = wx.Button(parent, wx.ID_ANY, 'Add')
+        btn_delete_instrument = wx.Button(parent, wx.ID_ANY, 'Delete')
 
         buttons = wx.BoxSizer(wx.HORIZONTAL)
         buttons.Add(btn_add_instrument, 0)
         buttons.Add(btn_delete_instrument, 0)
-        buttons.Add(btn_add_io, 0)
-        buttons.Add(btn_delete_io, 0)
 
         box.Add(self.instruments, 1, wx.EXPAND | wx.ALL, self._GAP)
-        box.Add(buttons, 0, wx.RIGHT | wx.BOTTOM | wx.LEFT, self._GAP)
+        box.Add(buttons, 0, wx.ALL, self._GAP)
 
         return box
 
@@ -81,13 +68,13 @@ class ViewMain(wx.Frame):
         btn_insert_step = wx.Button(parent, wx.ID_ANY, 'Insert')
         btn_delete_step = wx.Button(parent, wx.ID_ANY, 'Delete')
 
-        grid = wx.GridBagSizer(self._GAP, self._GAP)
-        grid.Add(btn_add_step, (0, 0), wx.DefaultSpan)
-        grid.Add(btn_insert_step, (0, 1), wx.DefaultSpan)
-        grid.Add(btn_delete_step, (0, 2), wx.DefaultSpan)
+        buttons = wx.BoxSizer(wx.HORIZONTAL)
+        buttons.Add(btn_add_step, 0)
+        buttons.Add(btn_insert_step, 0)
+        buttons.Add(btn_delete_step, 0)
 
         box.Add(self._lst_process, 1, wx.EXPAND | wx.ALL, self._GAP)
-        box.Add(grid, 0, wx.ALL, self._GAP)
+        box.Add(buttons, 0, wx.ALL, self._GAP)
 
         return box
 
@@ -110,17 +97,16 @@ class ViewMain(wx.Frame):
         btn_add_measurement = wx.Button(parent, wx.ID_ANY, 'Add')
         btn_delete_measurement = wx.Button(parent, wx.ID_ANY, 'Delete')
 
-        grid = wx.GridBagSizer(self._GAP, self._GAP)
-        grid.Add(btn_add_measurement, (0, 0), wx.DefaultSpan)
-        grid.Add(btn_delete_measurement, (0, 1), wx.DefaultSpan)
+        buttons = wx.BoxSizer(wx.HORIZONTAL)
+        buttons.Add(btn_add_measurement, 0)
+        buttons.Add(btn_delete_measurement, 0)
 
         grid_box = wx.BoxSizer(wx.VERTICAL)
         grid_box.Add(self._grid_measurements, 1, wx.EXPAND | wx.ALL, 1)
-
         grid_panel.SetSizer(grid_box)
 
         box.Add(grid_panel, 1, wx.EXPAND | wx.ALL, self._GAP)
-        box.Add(grid, 0, wx.ALL, self._GAP)
+        box.Add(buttons, 0, wx.ALL, self._GAP)
 
         return box
 
