@@ -5,7 +5,6 @@ Main view for the application
 import lily_unit_test
 import wx.grid
 
-from src.models.image_data import ImageData
 from wx.dataview import DataViewTreeCtrl
 
 
