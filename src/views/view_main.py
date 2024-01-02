@@ -7,12 +7,12 @@ import wx
 
 from src.models.image_data import ImageData
 from wx.dataview import DataViewTreeCtrl
-from wx.dataview import NullDataViewItem
 
 
 class ViewMain(wx.Frame):
 
     _GAP = 10
+    _MINIMUM_WINDOW_SIZE = (400, 700)
 
     def __init__(self, title):
         super().__init__(None, wx.ID_ANY, title)
@@ -22,6 +22,8 @@ class ViewMain(wx.Frame):
         main_box.Add(self._create_instruments_controls(panel), 1, wx.EXPAND | wx.ALL, self._GAP)
 
         panel.SetSizer(main_box)
+
+        self.SetInitialSize(self._MINIMUM_WINDOW_SIZE)
 
     ###########
     # Private #
