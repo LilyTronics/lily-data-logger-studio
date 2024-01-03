@@ -22,6 +22,7 @@ The instrument files can be created using the application. There is no need to c
 A number of JSON files are provided with the application. These include:
 
 * TDS220 oscilloscope (or compatible TDS200, TDS1000 and TDS2000, they have the same interface)
+* NI USB-6009 (requires drivers from NI)
 * Protek 506 digital multimeter
 * Arduino Uno IO module (reading analog voltages, reading and writing digital IO, sketch for the Arduino Uno is included in this repo)
 * A number of simulated instruments:
