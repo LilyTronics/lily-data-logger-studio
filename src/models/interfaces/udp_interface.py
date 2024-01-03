@@ -6,20 +6,16 @@ import lily_unit_test
 import socket
 import threading
 
+from src.models.interfaces.interface import Interface
 
-class UdpInterface(object):
+
+class UdpInterface(Interface):
 
     def __init__(self, server_ip_address, server_port, timeout):
         self._server_ip_address = server_ip_address
         self._server_port = server_port
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self._socket.settimeout(timeout)
-
-    def raise_connection_exception(self, params):
-        raise Exception(f'Could not connect to {params}')
-
-    def raise_timeout_exception(self):
-        raise Exception('Error receiver timeout')
 
     def send_command(self, command):
         response = b''
