@@ -39,7 +39,7 @@ def parse_json_file(filename):
     return data
 
 
-class TestInstrumentNames(lily_unit_test.TestSuite):
+class TestInstruments(lily_unit_test.TestSuite):
 
     EXPECTED_NAMES = ['Multimeter UDP', 'Temperature chamber UDP']
     # Invalid files and the expected error message
