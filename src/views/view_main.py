@@ -6,6 +6,7 @@ import lily_unit_test
 import wx.grid
 
 from src.models.image_data import ImageData
+from unit_test.TestSuite import TestSuite
 from wx.dataview import DataViewTreeCtrl
 
 
@@ -181,7 +182,7 @@ class ViewMain(wx.Frame):
         return box
 
 
-class ViewMainTest(lily_unit_test.TestSuite):
+class ViewMainTest(TestSuite):
 
     WINDOW_NAME = 'ViewMain Test'
 

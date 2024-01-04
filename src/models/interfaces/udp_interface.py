@@ -2,11 +2,11 @@
 Send to a listening UDP port and process responses.
 """
 
-import lily_unit_test
 import socket
 import threading
 
 from src.models.interfaces.interface import Interface
+from unit_test.TestSuite import TestSuite
 
 
 class UdpInterface(Interface):
@@ -33,7 +33,7 @@ class UdpInterface(Interface):
         self._socket.close()
 
 
-class TestUdpInterface(lily_unit_test.TestSuite):
+class TestUdpInterface(TestSuite):
 
     _IP = 'localhost'
     _PORT = 20000
