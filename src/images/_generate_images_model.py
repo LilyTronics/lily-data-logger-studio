@@ -11,7 +11,8 @@ import os
 _OUTPUT_FILENAME = '../models/image_data.py'
 _IMAGE_EXTENSIONS = ['.png']
 _MAX_LINE_LENGTH = 100
-_MAGIC_NUMBER = 7
+_INDENT_WIDTH = 4
+
 
 def generate_image_data():
     names = []
@@ -30,9 +31,9 @@ def generate_image_data():
                 names.append(name)
                 with open(item, 'rb') as fp_image:
                     content = base64.b64encode(fp_image.read())
-                data_indent = len(name) + _MAGIC_NUMBER
+                data_indent = len(name) + _INDENT_WIDTH * 2 - 1
                 fp_model.write('\n    {} = PyEmbeddedImage(\n'.format(name))
-                max_data_length = _MAX_LINE_LENGTH - data_indent - _MAGIC_NUMBER
+                max_data_length = _MAX_LINE_LENGTH - data_indent - _INDENT_WIDTH * 2 - 1
                 while len(content) > max_data_length:
                     fp_model.write('{}{}\n'.format(' ' * (data_indent + 4), content[:max_data_length]))
                     content = content[max_data_length:]
