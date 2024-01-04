@@ -8,4 +8,4 @@
 *.pyc
 
 # test reports
-**/lily_unit_test_reports/*
+**/test_reports/*
