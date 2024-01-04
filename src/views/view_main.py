@@ -5,10 +5,20 @@ Main view for the application
 import lily_unit_test
 import wx.grid
 
+from src.models.image_data import ImageData
 from wx.dataview import DataViewTreeCtrl
 
 
 class ViewMain(wx.Frame):
+
+    ID_TOOL_OPEN_CONFIGURATION = 100
+    ID_TOOL_SAVE_CONFIGURATION = 101
+    ID_TOOL_EDIT_CONFIGURATION = 102
+    ID_TOOL_CHECK_INSTRUMENTS = 103
+    ID_TOOL_START_PROCESS = 104
+    ID_TOOL_STOP_PROCESS = 105
+    ID_TOOL_EXPORT_CSV = 106
+    ID_TOOL_SHOW_LOG = 107
 
     _GAP = 5
 
@@ -32,6 +42,7 @@ class ViewMain(wx.Frame):
         lab_box.Add(self._create_measurement_box(panel), 50, wx.EXPAND | wx.TOP | wx.RIGHT | wx.BOTTOM, self._GAP)
 
         main_box = wx.BoxSizer(wx.VERTICAL)
+        main_box.Add(self._create_toolbar(panel), 0, wx.EXPAND | wx.ALL, self._GAP)
         main_box.Add(self._create_config_info(panel), 0, wx.EXPAND | wx.ALL, self._GAP)
         main_box.Add(lab_box, 1, wx.EXPAND)
 
@@ -42,6 +53,33 @@ class ViewMain(wx.Frame):
     ###########
     # Private #
     ###########
+
+    def _create_toolbar(self, parent):
+        tools = [
+            (self.ID_TOOL_OPEN_CONFIGURATION, ImageData.open_config.Bitmap, 'Open configuration'),
+            (self.ID_TOOL_SAVE_CONFIGURATION, ImageData.save_config.Bitmap, 'Save configuration'),
+            (0,),
+            (self.ID_TOOL_EDIT_CONFIGURATION, ImageData.settings.Bitmap, 'Configuration settings'),
+            (0,),
+            (self.ID_TOOL_CHECK_INSTRUMENTS, ImageData.check_instruments.Bitmap, 'Check instruments'),
+            (0,),
+            (self.ID_TOOL_START_PROCESS, ImageData.start.Bitmap, 'Start'),
+            (self.ID_TOOL_STOP_PROCESS, ImageData.stop.Bitmap, ' Stop'),
+            (0,),
+            (self.ID_TOOL_EXPORT_CSV, ImageData.export_csv.Bitmap, 'Export to CSV'),
+            (0,),
+            (self.ID_TOOL_SHOW_LOG, ImageData.show_log.Bitmap, 'Show log'),
+        ]
+        self._toolbar = wx.ToolBar(parent, style=wx.TB_HORIZONTAL | wx.TB_FLAT | wx.TB_NODIVIDER)
+        for tool in tools:
+            if tool[0] > 0:
+                self._toolbar.AddTool(tool[0], '', tool[1], tool[2])
+            else:
+                self._toolbar.AddSeparator()
+
+        self._toolbar.Realize()
+
+        return self._toolbar
 
     def _create_config_info(self, parent):
         box = wx.StaticBoxSizer(wx.StaticBox(parent, wx.ID_ANY, ' Configuration: '), wx.HORIZONTAL)
