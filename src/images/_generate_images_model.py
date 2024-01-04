@@ -26,7 +26,7 @@ def generate_image_data():
         for item in os.listdir('.'):
             parts = os.path.splitext(item)
             if parts[1] in _IMAGE_EXTENSIONS:
-                name = parts[0].replace('-', '_')
+                name = parts[0]
                 assert name not in names, 'The name {} already exists'.format(name)
                 names.append(name)
                 with open(item, 'rb') as fp_image:
