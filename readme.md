@@ -17,7 +17,7 @@ Requirements for running the application:
 Instruments are defined in JSON formatted files and can be exported from or imported in to the application.
 This way anyone can create their own instrument files and use them in the application.
 
-The instrument files can be created using the application. There is no need to create a JSON file in a text editor.
+A JSON file can be created in a text editor.
 
 A number of JSON files are provided with the application. These include:
 
@@ -86,10 +86,7 @@ There are a number of variations possible:
 * `{float:1-3,0-3}`: a floating point with 1 to 3 digits before the decimal point and 0 to 3 digits behind the decimal point.
 * `{int}`: an integer with as many digits as required.
 * `{int:3}`: an integer with three digits using leafing zeros if needed.
-* `{string}`: a literal string value with undefined length.
-* `{string:32}`: a literal string value with a maximum of 32 characters, spaces will be added at the end of the string to match the length.
-* `{bool}`: a boolean value true or false, in lower case.
-* `{bool:upper}`: a boolean value true or false, in upper case.
-* `{bool:cap}`: a boolean value True or False, capitalized (first letter upper case).
+* `{str}`: a literal string value with undefined length.
+* `{str:32}`: a literal string value with a length of 32 characters, spaces will be added at the end of the string to match the length.
 
 2023 - LilyTronics (https://lilytronics.nl)
