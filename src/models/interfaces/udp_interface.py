@@ -67,7 +67,7 @@ class TestUdpInterface(TestSuite):
     def setup(self):
         self._client = UdpInterface(self._IP, self._PORT, self._TIMEOUT)
 
-    def test_01_no_server_running(self):
+    def test_no_server_running(self):
         result = False
         try:
             self._client.send_command(self._TEST_DATA)
@@ -79,13 +79,13 @@ class TestUdpInterface(TestSuite):
                 self.log.error('Invalid error message, expect to start with: Could not connect to')
         return result
 
-    def test_02_server_running(self):
+    def test_server_running(self):
         self._start_server()
         response = self._client.send_command(self._TEST_DATA)
         self.log.debug('Response: {}'.format(response[0]))
         assert response[0] == self._TEST_DATA, 'Invalid response received, expected: {}'.format(self._TEST_DATA)
 
-    def test_03_timeout(self):
+    def test_timeout(self):
         result = False
         try:
             self._client.send_command(self._TEST_TIMEOUT_DATA)
