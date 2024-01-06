@@ -189,7 +189,7 @@ class ViewMainTest(TestSuite):
         self.app = wx.App(redirect=False)
         self.frame = ViewMain(self.WINDOW_NAME)
 
-    def test_01_show_frame(self):
+    def test_show_frame(self):
         self.frame.Show()
 
     def teardown(self):
