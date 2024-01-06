@@ -11,9 +11,10 @@ from unit_test.test_suite import TestSuite
 
 class UdpInterface(Interface):
 
-    def __init__(self, server_ip_address, server_port, timeout):
+    def __init__(self, server_ip_address, server_port, timeout, rx_buffer_size=1500):
         self._server_ip_address = server_ip_address
         self._server_port = server_port
+        self._rx_buffer_size = rx_buffer_size
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self._socket.settimeout(timeout)
 
@@ -21,7 +22,7 @@ class UdpInterface(Interface):
         response = b''
         self._socket.sendto(command, (self._server_ip_address, self._server_port))
         try:
-            response = self._socket.recvfrom(1024)
+            response = self._socket.recvfrom(self._rx_buffer_size)
         except ConnectionResetError:
             self.raise_connection_exception(f'{self._server_ip_address}:{self._server_port}')
         except TimeoutError:
