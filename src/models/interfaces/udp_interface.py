@@ -6,7 +6,7 @@ import socket
 import threading
 
 from src.models.interfaces.interface import Interface
-from unit_test.TestSuite import TestSuite
+from unit_test.test_suite import TestSuite
 
 
 class UdpInterface(Interface):

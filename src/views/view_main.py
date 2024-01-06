@@ -5,7 +5,7 @@ Main view for the application
 import wx.grid
 
 from src.models.image_data import ImageData
-from unit_test.TestSuite import TestSuite
+from unit_test.test_suite import TestSuite
 from wx.dataview import DataViewTreeCtrl
 
 
