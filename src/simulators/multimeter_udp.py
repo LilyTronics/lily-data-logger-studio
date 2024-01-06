@@ -69,7 +69,7 @@ class MultimeterUdp(object):
         return self._thread is not None and self._thread.is_alive()
 
 
-class TestMultiMeterUdp(lily_unit_test.TestSuite):
+class TestMultimeterUdp(lily_unit_test.TestSuite):
 
     RX_TIME_OUT = 0.5
     RX_BUFFER_SIZE = 1500
@@ -145,4 +145,4 @@ class TestMultiMeterUdp(lily_unit_test.TestSuite):
 
 if __name__ == '__main__':
 
-    TestMultiMeterUdp().run(True)
+    TestMultimeterUdp().run(True)
