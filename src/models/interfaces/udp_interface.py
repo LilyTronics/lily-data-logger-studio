@@ -1,5 +1,5 @@
 """
-Send to a listening UDP port and process responses.
+UDP client interface.
 """
 
 import socket
