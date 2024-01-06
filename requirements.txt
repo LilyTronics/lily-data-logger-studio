@@ -1,2 +1,2 @@
 wxpython       >= 4.2.1
-lily-unit-test >= 1.4.0
+lily-unit-test >= 1.5.0
