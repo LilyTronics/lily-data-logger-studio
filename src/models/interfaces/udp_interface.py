@@ -22,7 +22,7 @@ class UdpInterface(Interface):
         response = b''
         self._socket.sendto(command, (self._server_ip_address, self._server_port))
         try:
-            response = self._socket.recvfrom(self._rx_buffer_size)
+            response = self._socket.recv(self._rx_buffer_size)
         except ConnectionResetError:
             self.raise_connection_exception(f'{self._server_ip_address}:{self._server_port}')
         except TimeoutError:
@@ -83,8 +83,8 @@ class TestUdpInterface(TestSuite):
     def test_server_running(self):
         self._start_server()
         response = self._client.send_command(self._TEST_DATA)
-        self.log.debug('Response: {}'.format(response[0]))
-        assert response[0] == self._TEST_DATA, 'Invalid response received, expected: {}'.format(self._TEST_DATA)
+        self.log.debug('Response: {}'.format(response))
+        self.fail_if(response != self._TEST_DATA, 'Invalid response received, expected: {}'.format(self._TEST_DATA))
 
     def test_timeout(self):
         result = False
