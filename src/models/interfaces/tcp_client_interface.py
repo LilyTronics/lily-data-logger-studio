@@ -1,5 +1,5 @@
 """
-UDP client interface.
+TCP client interface.
 """
 
 import socket
@@ -9,37 +9,43 @@ from src.models.interfaces.interface import Interface
 from unit_test.test_suite import TestSuite
 
 
-class UdpInterface(Interface):
+class TcpClientInterface(Interface):
 
     def __init__(self, server_ip_address, server_port, timeout, rx_buffer_size=1500):
         self._server_ip_address = server_ip_address
         self._server_port = server_port
+        self._timeout = timeout
         self._rx_buffer_size = rx_buffer_size
-        self._socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self._socket.settimeout(timeout)
+        self._socket = None
 
     def send_command(self, command):
         response = b''
-        self._socket.sendto(command, (self._server_ip_address, self._server_port))
+        try:
+            self._socket = socket.create_connection((self._server_ip_address, self._server_port), self._timeout)
+        except (Exception, ):
+            self.raise_connection_exception(f'{self._server_ip_address}:{self._server_port}')
+
+        self._socket.sendall(command)
         try:
             response = self._socket.recv(self._rx_buffer_size)
-        except ConnectionResetError:
-            self.raise_connection_exception(f'{self._server_ip_address}:{self._server_port}')
         except TimeoutError:
             self.raise_timeout_exception()
 
         return response
 
     def close(self):
-        self._socket.close()
+        if self._socket is not None:
+            self._socket.close()
 
 
-class TestUdpInterface(TestSuite):
+class TestTcpClientInterface(TestSuite):
 
     _IP = 'localhost'
-    _PORT = 20000
-    _TIMEOUT = 0.5
-    _TEST_DATA = b'test UDP interface'
+    _PORT = 21000
+    _CLIENT_TIMEOUT = 0.5
+    _SERVER_TIMEOUT = 0.1
+    _RX_BUFFER_SIZE = 1500
+    _TEST_DATA = b'test TCP interface'
     _TEST_TIMEOUT_DATA = b'do_timeout'
 
     _socket = None
@@ -49,24 +55,24 @@ class TestUdpInterface(TestSuite):
     def _process_data(self):
         while not self._stop_event.is_set():
             try:
-                data, client_address = self._socket.recvfrom(1024)
-                if data == self._TEST_TIMEOUT_DATA:
-                    continue
-                self._socket.sendto(data, client_address)
+                connection, client_address = self._socket.accept()
             except TimeoutError:
-                pass
+                continue
+            data = connection.recv(self._RX_BUFFER_SIZE)
+            if data == self._TEST_TIMEOUT_DATA:
+                continue
+            connection.sendall(data)
 
     def _start_server(self):
-        self._socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self._socket.settimeout(0.1)
-        self._socket.bind((self._IP, self._PORT))
+        self._socket = socket.create_server((self._IP, self._PORT))
+        self._socket.settimeout(self._SERVER_TIMEOUT)
         self._stop_event = threading.Event()
         self._thread = threading.Thread(target=self._process_data)
         self._thread.daemon = True
         self._thread.start()
 
     def setup(self):
-        self._client = UdpInterface(self._IP, self._PORT, self._TIMEOUT)
+        self._client = TcpClientInterface(self._IP, self._PORT, self._CLIENT_TIMEOUT)
 
     def test_no_server_running(self):
         result = False
@@ -108,4 +114,4 @@ class TestUdpInterface(TestSuite):
 
 if __name__ == '__main__':
 
-    TestUdpInterface().run()
+    TestTcpClientInterface().run(True)
