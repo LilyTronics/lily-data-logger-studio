@@ -39,7 +39,7 @@ class MultimeterUdp(object):
     def _do_measurement(self):
         while not self._stop_event.is_set():
             try:
-                response = b'UNKNOWN COMMAND'
+                response = 'UNKNOWN COMMAND'
                 data, client_address = self._socket.recvfrom(self._RX_BUFFER_SIZE)
                 if self.CMD_VOLTAGE_DC + self._TERMINATOR == data:
                     response = 'VDC={:.3f}V'.format(random.uniform(*self._VDC_RANGE))
@@ -80,7 +80,8 @@ class TestMultimeterUdp(lily_unit_test.TestSuite):
         self.log.debug('Running threads: {}'.format(', '.join(map(lambda x: str(x), threading.enumerate()))))
 
     def send_command(self, command):
-        self.socket.sendto(command + self.TERMINATOR, (SimulatorSettings.MultimeterUdp.IP, SimulatorSettings.MultimeterUdp.PORT))
+        self.socket.sendto(command + self.TERMINATOR,
+                           (SimulatorSettings.MultimeterUdp.IP, SimulatorSettings.MultimeterUdp.PORT))
         return self.socket.recvfrom(self.RX_BUFFER_SIZE)[0]
 
     def setup(self):
@@ -138,6 +139,10 @@ class TestMultimeterUdp(lily_unit_test.TestSuite):
         self.log.debug('Currents: {}'.format(currents))
         self.fail_if(min(currents) < 0.39, 'Current < 0.39 found: {}'.format(min(currents)))
         self.fail_if(max(currents) > 0.41, 'Current > 0.41 found: {}'.format(max(currents)))
+
+    def test_wrong_command(self):
+        response = self.send_command(b'UNKNOWN_COMMAND?')
+        self.fail_if(response != b'UNKNOWN COMMAND\n', 'Wrong response received: {}'.format(response))
 
     def teardown(self):
         self.multimeter.stop()
