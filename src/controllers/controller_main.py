@@ -79,6 +79,8 @@ class ControllerMain(object):
 
             self._log_view.Bind(wx.EVT_CLOSE, self._on_close_log)
             self._log_view.show()
+        else:
+            self._log_view.Raise()
 
     ##########
     # Public #
