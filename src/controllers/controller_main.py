@@ -9,7 +9,8 @@ from src.views.view_main import ViewMain
 
 class ControllerMain(object):
 
-    def __init__(self, view_title):
+    def __init__(self, view_title, logger):
+        self._logger = logger
         self._view = ViewMain(view_title)
 
     def show_view(self):
@@ -18,9 +19,13 @@ class ControllerMain(object):
 
 if __name__ == '__main__':
 
+    from src.models.logger import Logger
+
+    test_logger = Logger()
+
     app = wx.App(redirect=False)
 
-    controller = ControllerMain('ControllerMain Test')
+    controller = ControllerMain('ControllerMain Test', test_logger)
     controller.show_view()
 
     app.MainLoop()
