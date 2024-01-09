@@ -55,7 +55,7 @@ class TestTcpClientInterface(TestSuite):
     def _process_data(self):
         while not self._stop_event.is_set():
             try:
-                connection, client_address = self._socket.accept()
+                connection = self._socket.accept()[0]
             except TimeoutError:
                 continue
             data = connection.recv(self._RX_BUFFER_SIZE)
