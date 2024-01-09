@@ -3,6 +3,29 @@
 Universal data logger software aiming to work with any kind of electronics measurement device.
 Not only logging data but also controlling instruments (process automation).
 
+## Releases
+
+No releases yet, still work in progress.
+Things to do for the first release:
+
+* Add/edit/delete instruments
+* Add/edit/delete process steps
+* Add/delete measurements
+* Store/reload application settings
+* Edit configuration
+* Save/load configurations
+* Start/Stop data logger
+* Export measurements to CVS
+* Check instruments
+* Add the following instruments:
+  * TDS220 oscilloscope (or compatible TDS200, TDS1000 and TDS2000, they have the same interface)
+  * NI USB-6009 (requires drivers from NI)
+  * Protek 506 digital multimeter
+  * Arduino Uno IO module (reading analog voltages, reading and writing digital IO, sketch for the Arduino Uno is included in this repo)
+  * Add simulated instruments (for demo/testing the application):
+    * multimeter giving some random values
+    * temperature chamber
+ 
 ## Installation
 
 Requirements for running the application:
@@ -18,17 +41,6 @@ Instruments are defined in JSON formatted files and can be exported from or impo
 This way anyone can create their own instrument files and use them in the application.
 
 A JSON file can be created in a text editor.
-
-A number of JSON files are provided with the application. These include:
-
-* TDS220 oscilloscope (or compatible TDS200, TDS1000 and TDS2000, they have the same interface)
-* NI USB-6009 (requires drivers from NI)
-* Protek 506 digital multimeter
-* Arduino Uno IO module (reading analog voltages, reading and writing digital IO, sketch for the Arduino Uno is included in this repo)
-* A number of simulated instruments:
-  * multimeter giving some random values
-  * temperature chamber
-
 
 Instrument file format:
 
