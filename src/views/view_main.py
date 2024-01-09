@@ -5,7 +5,6 @@ Main view for the application
 import wx.grid
 
 from src.models.image_data import ImageData
-from unit_test.test_suite import TestSuite
 from wx.dataview import DataViewTreeCtrl
 
 
@@ -181,25 +180,11 @@ class ViewMain(wx.Frame):
         return box
 
 
-class ViewMainTest(TestSuite):
-
-    WINDOW_NAME = 'ViewMain Test'
-
-    def setup(self):
-        self.app = wx.App(redirect=False)
-        self.frame = ViewMain(self.WINDOW_NAME)
-
-    def test_show_frame(self):
-        self.frame.Show()
-
-    def teardown(self):
-        if not hasattr(self, 'do_not_close') or hasattr(self, 'do_not_close') and not self.do_not_close:
-            self.frame.Close()
-        self.app.MainLoop()
-
-
 if __name__ == '__main__':
 
-    ts = ViewMainTest()
-    ts.do_not_close = True
-    ts.run()
+    app = wx.App(redirect=False)
+
+    frame = ViewMain('ViewMain Test')
+    frame.Show()
+
+    app.MainLoop()
