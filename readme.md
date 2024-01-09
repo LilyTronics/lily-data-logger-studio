@@ -11,7 +11,6 @@ Things to do for the first release:
 * Add/edit/delete instruments
 * Add/edit/delete process steps
 * Add/delete measurements
-* Store/reload application settings
 * Edit configuration
 * Save/load configurations
 * Start/Stop data logger

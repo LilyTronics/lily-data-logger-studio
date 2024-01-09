@@ -11,7 +11,7 @@ from src.models.logger import Logger
 class ViewLogger(wx.Frame):
 
     _UPDATE_TIME = 300
-    _WINDOW_MIN_SIZE = (800, 500)
+    _WINDOW_MIN_SIZE = (700, 500)
 
     _COLOR_DEFAULT = '#000'
 
