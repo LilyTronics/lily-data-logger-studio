@@ -5,6 +5,7 @@ Main view for the application
 import wx.grid
 
 from src.models.image_data import ImageData
+from src.models.time_converter import create_duration_time_string
 from wx.dataview import DataViewTreeCtrl
 
 
@@ -32,7 +33,8 @@ class ViewMain(wx.Frame):
     _MINIMUM_WINDOW_SIZE = (1100, 700)
 
     def __init__(self, title):
-        super().__init__(None, wx.ID_ANY, title)
+        self._title = title
+        super().__init__(None, wx.ID_ANY, self._title)
         panel = wx.Panel(self)
 
         lab_box = wx.BoxSizer(wx.HORIZONTAL)
@@ -178,6 +180,39 @@ class ViewMain(wx.Frame):
         box.Add(buttons, 0, wx.ALL, self._GAP)
 
         return box
+
+    ##########
+    # Public #
+    ##########
+
+    def update_configuration_filename(self, filename, is_changed):
+        title = '%s - %s' % (self._title, filename)
+        if is_changed:
+            title += ' *'
+        self.SetTitle(title)
+
+    def update_configuration_info(self, sample_time, end_time, continuous_mode):
+        self._lbl_sample_time.SetLabel(create_duration_time_string(sample_time))
+        if continuous_mode:
+            self._value_end_time.SetLabel('Continuous mode')
+            self._lbl_end_time.Hide()
+            self._lbl_total_samples.Hide()
+            self._value_total_samples.Hide()
+        else:
+            self._lbl_end_time.Show()
+            self._lbl_total_samples.Show()
+            self._value_total_samples.Show()
+            self._value_end_time.SetLabel(create_duration_time_string(end_time))
+            total_samples = '-'
+            if sample_time > 0 and end_time > 0:
+                total_samples = int(end_time / sample_time) + 1
+            self._value_total_samples.SetLabel(str(total_samples))
+
+        self._lbl_sample_time.GetParent().Layout()
+
+    def update_elapsed_time(self, elapsed_time):
+        self._lbl_elapsed_time.SetLabel(create_duration_time_string(elapsed_time))
+        self._lbl_elapsed_time.GetParent().Layout()
 
 
 if __name__ == '__main__':

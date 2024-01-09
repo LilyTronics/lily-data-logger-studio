@@ -4,6 +4,7 @@ Main controller for the application.
 
 import wx
 
+from src.models.configuration import Configuration
 from src.models.settings import Settings
 from src.views.view_logger import ViewLogger
 from src.views.view_main import ViewMain
@@ -29,10 +30,14 @@ class ControllerMain(object):
         self._view.Bind(wx.EVT_CLOSE, self._on_view_close)
         self._view.Bind(wx.EVT_TOOL, self._on_show_log, id=self._view.ID_TOOL_SHOW_LOG)
 
+        self._configuration = Configuration()
+        self._elapsed_time = 0
         self._log_view = None
 
         if show_log_window:
             wx.CallAfter(self._show_log)
+
+        wx.CallAfter(self._update_view_from_configuration)
 
     ##################
     # Event handlers #
@@ -64,6 +69,13 @@ class ControllerMain(object):
     ###########
     # Private #
     ###########
+
+    def _update_view_from_configuration(self):
+        self._view.update_configuration_filename(self._configuration.get_filename(), self._configuration.is_changed())
+        self._view.update_configuration_info(self._configuration.get_sample_time(),
+                                             self._configuration.get_end_time(),
+                                             self._configuration.get_continuous_mode())
+        self._view.update_elapsed_time(self._elapsed_time)
 
     def _show_log(self):
         if self._log_view is None:
